@@ -33,7 +33,7 @@ public class Page implements Runnable
 
     // PROBLEM : SAXPareser is too fast!
     //           5th thead is going inside before 0th thread creates new hash for it,
-    // SOLUTION: ???
+    // SOLUTION: ???  maybe like threadHash use a datastructure to maintain balance..    :|
     public void run()  //every kth thread run should create new hash to add entry, and every (k+1)th should wait for all buddy threads to finish and then write hash into file then destroy hash instance.
     {
         int counter = page_count++;
