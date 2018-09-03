@@ -13,7 +13,7 @@ public class SAXwikiHandler extends DefaultHandler
 {
     Page currPg;
     StringBuffer buff;
-    public static int counter = 0, tag_flag = -1;
+    public static int tag_flag = -1;
     private String last_qName;
 
     public void readDatafromXML(String filename) throws SAXException, IOException, ParserConfigurationException
@@ -26,7 +26,6 @@ public class SAXwikiHandler extends DefaultHandler
     @Override
     public void startDocument() throws SAXException
     {
-        new GlobalHash();
         System.out.print("\n\t PARSING XML FILE...");
     }
 
@@ -66,9 +65,9 @@ public class SAXwikiHandler extends DefaultHandler
         {
             currPg.setText(buff.toString());
             // MULTITHREADING ENABLER
-//            Thread thread = new Thread (currPg);
-//            thread.start();
-            currPg.run();
+            Thread thread = new Thread (currPg);
+            thread.start();
+            //currPg.run();
         }
 
         tag_flag = 0;
