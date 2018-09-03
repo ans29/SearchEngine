@@ -7,8 +7,8 @@ import java.util.TreeMap;
 
 public class FileHandler
 {
-    static String prefix = "level0_";
-    static Integer lvl0 = -1;
+    static String prefix = "out/level0/";
+    static Integer lvl0 = 0;
     BufferedWriter bw;
 
     public void writeHash(TreeMap<Integer, HashMap<Long,Pair<Integer, LinkedList<Integer>>>> sortedHash) throws IOException
@@ -16,6 +16,7 @@ public class FileHandler
         String out_file = prefix + (lvl0++).toString();
         FileWriter writer = new FileWriter(out_file);
         BufferedWriter bw = new BufferedWriter(writer);
+
 
         for (Integer tId : sortedHash.keySet())
         {
@@ -47,6 +48,5 @@ public class FileHandler
             bw.write('\n');
         }
         bw.close();
-        System.out.println (".. " + out_file + " CREATED SUCCESSFULLY.");
     }
 }

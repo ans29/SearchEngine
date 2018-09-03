@@ -7,14 +7,18 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.TreeMap;
 
 public class SAXwikiHandler extends DefaultHandler
 {
     Page currPg;
+    Integer page_count = -1;
     StringBuffer buff;
     public static int tag_flag = -1;
     private String last_qName;
+    TermHash hash;
 
     public void readDatafromXML(String filename) throws SAXException, IOException, ParserConfigurationException
     {
@@ -27,6 +31,7 @@ public class SAXwikiHandler extends DefaultHandler
     public void startDocument() throws SAXException
     {
         System.out.print("\n\t PARSING XML FILE...");
+        hash = new TermHash();
     }
 
     @Override
@@ -64,10 +69,23 @@ public class SAXwikiHandler extends DefaultHandler
         else if ("text".equals(qName))
         {
             currPg.setText(buff.toString());
-            // MULTITHREADING ENABLER
-            Thread thread = new Thread (currPg);
-            thread.start();
-            //currPg.run();
+            MyParser.extractOthers (currPg, hash);
+
+            if (page_count++ == Constants.pages_per_file)
+            {
+                TreeMap<Integer, HashMap<Long, Pair<Integer, LinkedList<Integer>>>> sortedHash = new TreeMap<>();
+                sortedHash.putAll(hash.termHash);
+                try
+                {
+                    FileHandler level0 = new FileHandler();
+                    level0.writeHash(sortedHash);
+                }
+                catch (IOException e)
+                {     e.printStackTrace();      }
+
+                page_count = 0;
+                hash.termHash.clear();
+            }
         }
 
         tag_flag = 0;

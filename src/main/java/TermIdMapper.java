@@ -7,6 +7,7 @@ public class TermIdMapper
 
     public TermIdMapper ()
     {
+        map = new HashMap<>();
         tId = -1;
     }
 

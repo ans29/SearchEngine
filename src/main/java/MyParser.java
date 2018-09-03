@@ -7,13 +7,13 @@
 
 public class MyParser
 {
-    public static void extractOthers(Page pg, TermHash groupHash)
+    public static void extractOthers(Page pg, TermHash hash)
     {
         int tag_counter;
         Long pgId = Long.parseLong(pg.id);
         boolean is_this_line_tag_itself = false;
 
-        groupHash.putHash(pg.title, pgId, 1);
+        hash.putHash(pg.title, pgId, 1);
 
 
         String[] text_lines = pg.text.split("\n");
@@ -46,7 +46,7 @@ public class MyParser
             else if ( text_lines[i].startsWith ("\\[\\[Category:"))
             {
                 tag_counter = 0;
-                groupHash.putHash (text_lines[i].substring (11) + " ", pgId, 4);
+                hash.putHash (text_lines[i].substring (11) + " ", pgId, 4);
             }
             else if (text_lines[i].startsWith ("{|"))
             {
@@ -65,20 +65,20 @@ public class MyParser
             {
                 case 0: tag_counter = 2;
                         break;
-                case 2: groupHash.putHash(text_lines[i], pgId, 2);
+                case 2: hash.putHash(text_lines[i], pgId, 2);
                         break;
                 case 3: if (is_this_line_tag_itself == true)
-                            groupHash.putHash (text_lines[i].substring (10) + " ", pgId, 3);
+                            hash.putHash (text_lines[i].substring (10) + " ", pgId, 3);
                         else
-                            groupHash.putHash (text_lines[i], pgId, 3);
+                            hash.putHash (text_lines[i], pgId, 3);
                         break;
                 case 4: tag_counter = 2;
                         break;
                 case 5 :if (is_this_line_tag_itself == false)
-                            groupHash.putHash (text_lines[i], pgId, 5);
+                            hash.putHash (text_lines[i], pgId, 5);
                         break;
                 case 6: if (is_this_line_tag_itself == false)
-                            groupHash.putHash (text_lines[i], pgId, 6);
+                            hash.putHash (text_lines[i], pgId, 6);
                         break;
             }
 

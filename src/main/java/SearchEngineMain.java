@@ -18,6 +18,8 @@ public class SearchEngineMain
         saXwikiHandler.readDatafromXML(filename);
 
         Long diff = (System.nanoTime() - start)/1000000000;
-        System.out.print("\t Inverted index created in : " + diff.toString() + " sec.\n\t WRITING INTO FILE...");
+        System.out.print("\t Inverted index Level0 files created in : " + diff.toString());
+
+        
     }
 }
