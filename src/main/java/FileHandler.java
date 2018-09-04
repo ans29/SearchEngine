@@ -7,13 +7,12 @@ import java.util.TreeMap;
 
 public class FileHandler
 {
-    static String prefix = "out/level0/";
     static Integer lvl0 = 0;
     BufferedWriter bw;
 
     public void writeHash(TreeMap<Integer, HashMap<Long,Pair<Integer, LinkedList<Integer>>>> sortedHash) throws IOException
     {
-        String out_file = prefix + (lvl0++).toString();
+        String out_file = Constants.level0dir + (lvl0++).toString();
         FileWriter writer = new FileWriter(out_file);
         BufferedWriter bw = new BufferedWriter(writer);
 
@@ -49,4 +48,6 @@ public class FileHandler
         }
         bw.close();
     }
+
+
 }
