@@ -3,9 +3,11 @@ import java.util.HashSet;
 
 class Constants
 {
-    static String parsedFiles = "out/level1/";
-    static String MergedFile = "out/merged/";
-    static String SplitFiles = "out/split/";
+    static String root = "out/";
+    static String parsedFiles = root + "level1/";
+    static String MergedFile = root + "merged/";
+    static String SplitFiles = root + "split/";
+    static String offset_dir = root + "offsets/";
     static Long line_in_merged;
     static HashSet<String> stopWords;
     static Integer pages_per_file;
