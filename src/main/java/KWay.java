@@ -11,13 +11,10 @@ public class KWay
 
     public static void autoMerge() throws IOException
     {
-//        File directory = new File(Constants.level0dir);
-//        while (directory.listFiles().length > Constants.filesToMergeAtATime)
-//            merge(Constants.level0dir, Constants.level0dir);
-//        merge(Constants.level0dir, Constants.level1dir);
-
+        File directory = new File(Constants.level0dir);
+        while (directory.listFiles().length > Constants.filesToMergeAtATime)
+            merge(Constants.level0dir, Constants.level0dir);
         merge(Constants.level0dir, Constants.level1dir);
-        //merge(Constants.level1dir, Constants.level2dir);
     }
 
     public static void merge(String level0dir, String level1dir) throws IOException
@@ -36,11 +33,9 @@ public class KWay
             scList.add(sc);
         }
 
-        //for (int i = 0; i < scList.size(); i += k)
-        int i=0;
+        for (int i = 0; i < scList.size(); i += k)
         {
             PriorityQueue<Pair<Long, Pair<Scanner, String>>> llpair = new PriorityQueue<Pair<Long, Pair<Scanner, String>>>(k, new PQComparator());
-            Pair<Long, Pair<Scanner, String>> readPair;
 
             for (int j = 0; j < k && i + j < scList.size(); j++)
                 refill (scList.get(i+j), llpair);
@@ -55,26 +50,16 @@ public class KWay
             refill (oldTop.getSecond().getFirst(), llpair);
 
 
-            for (int o=0; llpair.size() != 0  && o<350; o++)
+            while(llpair.size() != 0)
             {
-                if (o>325)
-                {
-                    System.out.print(llpair.peek().getFirst() + " : \t");
-                }
-
-
                 if (concatenated == false)
                     toWrite = oldTop.getSecond().getSecond();
 
                 newTop = llpair.poll();
                 refill(newTop.getSecond().getFirst(), llpair);
 
-                Long oldLong = oldTop.getFirst(), newLong = newTop.getFirst();
-
-                if (oldLong == newLong)
+                if (oldTop.getFirst().equals(newTop.getFirst()))
                 {
-                    if (o>325)
-                        System.out.println();
                     String line = newTop.getSecond().getSecond();
                     int index = line.indexOf(':');
                     String toAppend = line.substring(index+1);
@@ -83,8 +68,6 @@ public class KWay
                 }
                 else
                 {
-                    if (o>325)
-                        System.out.println (oldTop.getFirst() + " "  + newTop.getFirst());
                     bw.write(toWrite + "\n");
                     bw.flush();
                     toWrite = "";
@@ -96,8 +79,8 @@ public class KWay
             bw.write(newTop.getSecond().getSecond() + "\n");
             bw.flush();
 
-     //       for (int j = 0; j < k && i + j < scList.size(); j++)
-     //           fList[i+j].delete();
+            for (int j = 0; j < k && i + j < scList.size(); j++)
+                fList[i+j].delete();
         }
         counter = 0;
         levelCount++;

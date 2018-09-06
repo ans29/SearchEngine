@@ -37,6 +37,19 @@ public class SAXwikiHandler extends DefaultHandler
     @Override
     public void endDocument() throws SAXException
     {
+        TreeMap<Integer, HashMap<Long, Pair<Integer, LinkedList<Integer>>>> sortedHash = new TreeMap<>();
+        sortedHash.putAll(hash.termHash);
+        try
+        {
+            FileHandler level0 = new FileHandler();
+            level0.writeHash(sortedHash);
+        }
+        catch (IOException e)
+        {     e.printStackTrace();      }
+
+        page_count = 0;
+        hash.termHash.clear();
+
         System.out.println(".. COMPLETED");
     }
 
