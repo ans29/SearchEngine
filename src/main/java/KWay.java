@@ -11,12 +11,13 @@ public class KWay
 
     public static void merge(String level0dir, String level1dir) throws IOException
     {
-        Integer k = Constants.filesToMergeAtATime;
-        System.out.println("\t Now merging " + k.toString() + " files from " + level0dir + " into " + level1dir + " at a time...");
-
         File directory = new File(level0dir);
         File[] fList = directory.listFiles();
         LinkedList <Scanner> scList = new LinkedList<>();
+
+        Integer k = Constants.filesToMergeAtATime;
+        System.out.println("\t Now merging " + k.toString() + " files from " + fList.length + " files in " + level0dir + " into " + level1dir + " at a time...");
+
 
         for (File f: fList)
         {
@@ -71,6 +72,9 @@ public class KWay
             }
             bw.write(newTop.getSecond().getSecond() + "\n");
             bw.flush();
+
+            for (int j = 0; j < k && i + j < scList.size(); j++)
+                fList[i+j].delete();
         }
     }
 
