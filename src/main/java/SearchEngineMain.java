@@ -13,7 +13,7 @@ public class SearchEngineMain
         long start = System.nanoTime();
 
         new Constants();
-
+/*
         SAXwikiHandler saXwikiHandler = new SAXwikiHandler();           // STEP 1
         saXwikiHandler.readDatafromXML(filename);
 
@@ -21,5 +21,7 @@ public class SearchEngineMain
         System.out.println("\t Inverted index Level0 files created in : " + diff.toString() + " sec.");
 
         KWay.autoMerge();
+*/
+        Splitter.split();
     }
 }

@@ -5,14 +5,13 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.TreeMap;
 
-public class FileHandler
+class FileHandler
 {
-    static Integer lvl0 = 0;
-    BufferedWriter bw;
+    private static Integer lvl0 = 0;
 
-    public void writeHash(TreeMap<Integer, HashMap<Long,Pair<Integer, LinkedList<Integer>>>> sortedHash) throws IOException
+    void writeHash(TreeMap<Integer, HashMap<Long, Pair<Integer, LinkedList<Integer>>>> sortedHash) throws IOException
     {
-        String out_file = Constants.level0dir + (lvl0++).toString();
+        String out_file = Constants.parsedFiles + (lvl0++).toString();
         FileWriter writer = new FileWriter(out_file);
         BufferedWriter bw = new BufferedWriter(writer);
 

@@ -1,70 +1,76 @@
 import java.io.*;
 import java.util.LinkedList;
+import java.util.Objects;
 import java.util.PriorityQueue;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicReference;
 
-public class KWay
+class KWay
 {
-    public static Integer counter = 0, levelCount = 0;
-    public static FileWriter writer;
-    public static BufferedWriter bw;
+    private static Integer counter = 0, levelCount = 0;
 
-    public static void autoMerge() throws IOException
+    static void autoMerge() throws IOException
     {
-        File directory = new File(Constants.level0dir);
-        while (directory.listFiles().length > Constants.filesToMergeAtATime)
-            merge(Constants.level0dir, Constants.level0dir);
-        merge(Constants.level0dir, Constants.level1dir);
+        File directory = new File(Constants.parsedFiles);
+        while (Objects.requireNonNull(directory.listFiles()).length > Constants.filesToMergeAtATime)
+            merge(Constants.parsedFiles, Constants.parsedFiles);
+        merge(Constants.parsedFiles, Constants.MergedFile);
     }
 
-    public static void merge(String level0dir, String level1dir) throws IOException
+    private static void merge(String level0dir, String level1dir) throws IOException
     {
         File directory = new File(level0dir);
         File[] fList = directory.listFiles();
-        LinkedList <Scanner> scList = new LinkedList<>();
+        AtomicReference<LinkedList<Scanner>> scList = new AtomicReference<>(new LinkedList<>());
 
         Integer k = Constants.filesToMergeAtATime;
-        System.out.println("\t Now merging " + k.toString() + " files from " + fList.length + " files in " + level0dir + " into " + level1dir + " at a time...");
+        System.out.println("\t Now merging " + k.toString() + " files from " + (fList != null ? fList.length : 0) + " files in " + level0dir + " into " + level1dir + " at a time...");
 
 
-        for (File f: fList)
+        if (fList != null)
+            for (File f : fList)
+            {
+                Scanner sc = new Scanner(f);
+                scList.get().add(sc);
+            }
+
+        for (int i = 0; i < scList.get().size(); i += k)
         {
-            Scanner sc = new Scanner(f);
-            scList.add(sc);
-        }
+            PriorityQueue<Pair<Long, Pair<Scanner, String>>> llpair = new PriorityQueue<>(k, new PQComparator());
 
-        for (int i = 0; i < scList.size(); i += k)
-        {
-            PriorityQueue<Pair<Long, Pair<Scanner, String>>> llpair = new PriorityQueue<Pair<Long, Pair<Scanner, String>>>(k, new PQComparator());
-
-            for (int j = 0; j < k && i + j < scList.size(); j++)
-                refill (scList.get(i+j), llpair);
+            for (int j = 0; j < k && i + j < scList.get().size(); j++)
+                refill (scList.get().get(i+j), llpair);
 
             String writeTo = level1dir + levelCount + "_" + (counter++).toString();
-            writer = new FileWriter(writeTo);
-            bw = new BufferedWriter(writer);
+            FileWriter writer = new FileWriter(writeTo);
+            BufferedWriter bw = new BufferedWriter(writer);
 
             Pair<Long, Pair<Scanner, String>> oldTop = llpair.poll() , newTop = null;
             String toWrite = null;
             boolean concatenated = false;
-            refill (oldTop.getSecond().getFirst(), llpair);
+            if (oldTop != null) refill(oldTop.getSecond().getFirst(), llpair);
 
 
             while(llpair.size() != 0)
             {
-                if (concatenated == false)
+                if (!concatenated && oldTop != null)
                     toWrite = oldTop.getSecond().getSecond();
 
-                newTop = llpair.poll();
-                refill(newTop.getSecond().getFirst(), llpair);
 
-                if (oldTop.getFirst().equals(newTop.getFirst()))
+                newTop = llpair.poll();
+                if (newTop != null)
+                {
+                    refill(newTop.getSecond().getFirst(), llpair);
+                }
+
+                if (oldTop!=null && oldTop.getFirst().equals(newTop.getFirst()))
                 {
                     String line = newTop.getSecond().getSecond();
                     int index = line.indexOf(':');
                     String toAppend = line.substring(index+1);
                     toWrite = toWrite.concat(toAppend);
                     concatenated = true;
+                    Constants.line_in_merged++;
                 }
                 else
                 {
@@ -76,10 +82,13 @@ public class KWay
 
                 oldTop = newTop;
             }
-            bw.write(newTop.getSecond().getSecond() + "\n");
-            bw.flush();
+            if (newTop != null)
+            {
+                bw.write(newTop.getSecond().getSecond() + "\n");
+                bw.flush();
+            }
 
-            for (int j = 0; j < k && i + j < scList.size(); j++)
+            for (int j = 0; j < k && i + j < scList.get().size(); j++)
                 fList[i+j].delete();
         }
         counter = 0;
@@ -93,7 +102,7 @@ public class KWay
             llpair.add(readPair);
     }
 
-    public static Pair<Long, Pair<Scanner, String>> getPair(Scanner sc)
+    private static Pair<Long, Pair<Scanner, String>> getPair(Scanner sc)
     {
         if (sc.hasNextLine())
         {
@@ -102,9 +111,8 @@ public class KWay
             String tidStr = line.substring(0, index);
             Long tId = Long.parseLong(tidStr);
 
-            Pair<Scanner, String> inner = new Pair(sc, line);
-            Pair<Long, Pair<Scanner, String>> p = new Pair(tId, inner);
-            return p;
+            Pair inner = new Pair(sc, line);
+            return new Pair(tId, inner);
         }
         return null;
     }
