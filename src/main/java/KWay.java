@@ -30,39 +30,56 @@ public class KWay
             Pair<Long, Pair<Scanner, String>> readPair;
 
             for (int j = 0; j < k && i + j < scList.size(); j++)
-            {
-                readPair = getPair(scList.get(i+j));
-                if (readPair != null)
-                    llpair.add(readPair);
-            }
+                refill (scList.get(i+j), llpair);
 
             String writeTo = level1dir + (counter++).toString();
             writer = new FileWriter(writeTo);
             bw = new BufferedWriter(writer);
 
-            do
+            Pair<Long, Pair<Scanner, String>> oldTop = llpair.poll() , newTop = null;
+            String toWrite = null;
+            boolean concatenated = false;
+            refill (oldTop.getSecond().getFirst(), llpair);
+
+
+            while (llpair.size() != 0)
             {
-                Pair<Long, Pair<Scanner, String>> topEle = llpair.poll();
+                if (concatenated == false)
+                    toWrite = oldTop.getSecond().getSecond();
 
-                Scanner writeFrom = topEle.getSecond().getFirst();
-                String toWrite = topEle.getSecond().getSecond();
+                newTop = llpair.poll();
+                refill(newTop.getSecond().getFirst(), llpair);
 
-                readPair = getPair(writeFrom);
-                if (readPair != null)
-                    llpair.add(readPair);
 
-                while (llpair.peek().getFirst() == topEle.getFirst())
+                if (oldTop.getFirst() == newTop.getFirst())
                 {
-
+                    String line = newTop.getSecond().getSecond();
+                    int index = line.indexOf(':');
+                    String toAppend = line.substring(index+1);
+                    toWrite = toWrite.concat(toAppend);
+                    concatenated = true;
+                }
+                else
+                {
+                    bw.write(toWrite + "\n");
+                    bw.flush();
+                    toWrite = "";
+                    concatenated = false;
                 }
 
-
-                bw.write(toWrite + "\n");
-
-            } while (llpair.size() != 0);
+                oldTop = newTop;
+            }
+            bw.write(newTop.getSecond().getSecond() + "\n");
+            bw.flush();
         }
     }
 
+    private static void refill(Scanner sc, PriorityQueue<Pair<Long, Pair<Scanner, String>>> llpair)
+    {
+        Pair<Long, Pair<Scanner, String>> readPair = getPair(sc);
+        if (readPair != null)
+            llpair.add(readPair);
+    }
 
     public static Pair<Long, Pair<Scanner, String>> getPair(Scanner sc)
     {
@@ -75,7 +92,6 @@ public class KWay
 
             Pair<Scanner, String> inner = new Pair(sc, line);
             Pair<Long, Pair<Scanner, String>> p = new Pair(tId, inner);
-
             return p;
         }
         return null;
