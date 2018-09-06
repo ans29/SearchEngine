@@ -3,8 +3,9 @@ import java.util.HashSet;
 
 public class Constants
 {
-    public static String level0dir = "out/level0/";
-    public static String level1dir = "out/merged/";
+    public static String level0dir = "out/level1/";
+    public static String level1dir = "out/level2/";
+    public static String level2dir = "out/merged/";
     static HashSet<String> stopWords;
     public static Integer pages_per_file;
     public static Integer filesToMergeAtATime;
@@ -17,7 +18,7 @@ public class Constants
         stopWords = new HashSet<String>();
         stopWords.addAll (Arrays.asList(stopList));
 
-        pages_per_file = 100;
+        pages_per_file = 10;
         filesToMergeAtATime = 5;
     }
 }
