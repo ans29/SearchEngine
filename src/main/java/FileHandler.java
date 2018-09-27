@@ -19,10 +19,11 @@ class FileHandler
         for (Integer tId : sortedHash.keySet())
         {
             bw.write(tId.toString() + ":");                                 // tId:
-
+           // System.out.print(tId.toString() + ":");
             for (Long dId : sortedHash.get(tId).keySet())
             {
                 bw.write(dId.toString() + "f");                             // tId:dId<f>
+               // System.out.print( " ->" +  dId + "<-");
                 bw.write(sortedHash.get(tId).get(dId).getFirst().toString());   // tID:dId<f>freq
                 for (int i = 1; i <= 6 ; i++)
                 {
@@ -31,7 +32,9 @@ class FileHandler
                     {
                         switch (i)
                         {
-                            case 1:  bw.write('t');break;
+                            case 1:  bw.write('t');
+                            //    System.out.print("t");
+                                    break;
                             case 2:  bw.write('b');break;
                             case 3:  bw.write('i');break;
                             case 4:  bw.write('c');break;
@@ -39,11 +42,14 @@ class FileHandler
                             case 6:  bw.write('r');break;
                         }                                                       // tId:dId<f>freq<X>
                         bw.write (val.toString());                              // tId:dId<f>freq<X>val   -> tId:dId<f>freq<X>val<X2>val<x3>val
+                     //   if (val==1)
+                           // System.out.print(val.toString());
                     }
-                }
+                }                                                               // t,b,i,c,e,r
                 bw.write('|');                                               // tId:dId<f>freq<X>val<X2>val<x3>val|<f>freq<X>val<X2>val<x3>val
             }
             bw.write('\n');
+           // System.out.println();
         }
         bw.close();
     }
