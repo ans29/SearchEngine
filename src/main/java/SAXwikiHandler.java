@@ -73,7 +73,7 @@ public class SAXwikiHandler extends DefaultHandler
     }
 
     @Override
-    public void endElement(String uri, String localName, String qName) throws SAXException
+    public void endElement(String uri, String localName, String qName) throws SAXException  // try to print for id==5131.. possible <page> </page> err
     {
         if ("title".equals(qName))
             currPg.setTitle(buff.toString());
@@ -99,6 +99,8 @@ public class SAXwikiHandler extends DefaultHandler
                 page_count = 0;
                 hash.termHash.clear();
             }
+
+            Constants.No_of_pages++;
         }
 
         tag_flag = 0;

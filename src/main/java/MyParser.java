@@ -14,6 +14,7 @@ public class MyParser
         boolean is_this_line_tag_itself = false;
 
         hash.putHash(pg.title, pgId, 1);
+        TermIdMapper.tid_Title.put(pgId, pg.title);
 
 
         String[] text_lines = pg.text.split("\n");

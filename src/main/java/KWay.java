@@ -46,7 +46,7 @@ class KWay
             BufferedWriter bw = new BufferedWriter(writer);
 
             Pair<Long, Pair<Scanner, String>> oldTop = llpair.poll() , newTop = null;
-            String toWrite = null;
+            StringBuilder toWrite = null;
             boolean concatenated = false;
             if (oldTop != null) refill(oldTop.getSecond().getFirst(), llpair);
 
@@ -54,7 +54,7 @@ class KWay
             while(llpair.size() != 0)
             {
                 if (!concatenated && oldTop != null)
-                    toWrite = oldTop.getSecond().getSecond();
+                    toWrite = new StringBuilder(oldTop.getSecond().getSecond());
 
 
                 newTop = llpair.poll();
@@ -68,7 +68,7 @@ class KWay
                     String line = newTop.getSecond().getSecond();
                     int index = line.indexOf(':');
                     String toAppend = line.substring(index+1);
-                    toWrite = toWrite.concat(toAppend);
+                    toWrite = toWrite.append(toAppend);
                     concatenated = true;
                     Constants.line_in_merged++;
                 }
@@ -76,7 +76,7 @@ class KWay
                 {
                     bw.write(toWrite + "\n");
                     bw.flush();
-                    toWrite = "";
+                    toWrite = new StringBuilder("");
                     concatenated = false;
                 }
 
@@ -110,7 +110,6 @@ class KWay
             int index = line.indexOf(':');
             String tidStr = line.substring(0, index);
             Long tId = Long.parseLong(tidStr);
-
             Pair inner = new Pair(sc, line);
             return new Pair(tId, inner);
         }

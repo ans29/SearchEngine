@@ -26,12 +26,12 @@ class Splitter
 
 
         Long offset_val = 0L;
+        String file_to = null;
         for (Long i=0L; sc!=null && sc.hasNextLine(); i++)
         {
             if (i % Constants.lines_per_splitFile == 0)
             {
-                offset_val = 0L;
-                String file_to = dir_to + "/" + Long.toString(counter++);
+                file_to = dir_to + "/" + Long.toString(counter++);
                 String offset_file = offset_dir + "/" + Long.toString(counter-1);
                 writer = new FileWriter(file_to);
                 bw = new BufferedWriter(writer);
@@ -42,12 +42,13 @@ class Splitter
             String line = sc.nextLine();
             if (bw != null)
             {
-                bw.write(line + "\n" );
-                bw.flush();
-
-                offset_val += line.length();  //+1;  may have to add +1 because of "\n"
+                File f_forOffset = new File (file_to);
+                offset_val = f_forOffset.length();
                 bw_offset.write (offset_val.toString()  + "\n");
                 bw_offset.flush();
+
+                bw.write(line + "\n" );
+                bw.flush();
             }
         }
         if (bw != null)
