@@ -4,7 +4,7 @@ import java.util.HashSet;
 class Constants
 {
     public static int outputentry_per_page = 5;
-    static String root = "out/";
+    static String root = "/home/ansh/Documents/SearchEngine/out/";
     static String parsedFiles = root + "level1/";
     static String MergedFile = root + "merged/";
     static String SplitFiles = root + "split/";

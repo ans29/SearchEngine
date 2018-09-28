@@ -46,27 +46,31 @@ public class SearchHelper
 
     public static LinkedList<Character> parseInputForType(String input)
     {
-        if (input.matches("^.+[.+\\-].+$")) //\\.* \\[+ \\. - :] \\.+$"))  //Regex : ^.* [+ . - :] .+$
+        if (input.matches("^.+[.+\\-:].+$")) //\\.* \\[+ \\. - :] \\.+$"))  //Regex : ^.* [+ . - :] .+$
         {
-            System.out.println("\tqType : Boolean");
-            System.out.print ("in : " + input);
+            LinkedList <Character> seq = new LinkedList<>();
+            if(input.contains(":"))
+                seq.add('f');
+            else
+                seq.add('b');
+
+
             input = input.replaceAll("[\\+]", "@+");
             input = input.replaceAll("[.]", "@.");
             input = input.replaceAll("[-]", "@-");
-            System.out.println("\tout : " + input);
+
+            input = input.replaceAll("t:", "@t");
+            input = input.replaceAll("b:", "@b");
+            input = input.replaceAll("i:", "@i");
+            input = input.replaceAll("c:", "@c");
+            input = input.replaceAll("e:", "@e");
+            input = input.replaceAll("r:", "@r");
+
 
             String[] tokens = input.split("@");
-            LinkedList <Character> seq = new LinkedList<>();
-            seq.add('b');
+
             for (int i = 1; i < tokens.length; i++)
                 seq.add (tokens[i].charAt(0));
-            return seq;
-        }
-
-        else if(input.matches("^.+[.+\\-].+$"))
-        {
-            LinkedList <Character> seq = new LinkedList<>();
-            seq.add('f');
             return seq;
         }
         return null;

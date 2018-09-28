@@ -42,7 +42,7 @@ public class Search
             {
                 queryType = qType.get(0);
                 qType.remove(0);
-                System.out.println("\t Query type : " + queryType);
+                System.out.println("queryType : " + queryType + "\tq: " + qType);
             }
 
 
@@ -92,8 +92,22 @@ public class Search
 
                 for (int j = 0; j < postings.length; j++)
                 {
+                    // tId:dId<f>freq<X>val<X2>val<x3>val|<f>freq<X>val<X2>val<x3>val
+                    //HANDLE FIELD QUERIES
+                    if((queryType == 'f') )
+                    {
+                        if (!postings[j].contains (qType.get(0).toString()))
+                            continue;
+                    }
+
+
+
                     int f_pos = postings[j].indexOf('f');
+
                     int nextStopper_pos = SearchHelper.fetchPosForFreq (postings[j]);
+
+
+
                     Long dId_read = Long.parseLong (postings[j].substring (0, f_pos));
                     Long freq = Long.parseLong (postings[j].substring(f_pos+1, nextStopper_pos));
 
@@ -130,6 +144,8 @@ public class Search
                     }
                 }
 
+                if(queryType == 'f' && qType != null && qType.size() != 0)
+                    qType.remove(0);
             }
 
             // now we have all docId we need (INTERSECTION) : we'll now find tfidf and rank them
