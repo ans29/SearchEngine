@@ -24,9 +24,8 @@ public class Tokenizer
         for (int i = 0; i < tok.length; i++)
         {
             String s = new String (tok[i].toLowerCase());
-            if (s.matches("\\A\\p{ASCII}*\\z") && s.length()>2 && ! Constants.stopWords.contains(s)) {
+            if (s.matches("\\A\\p{ASCII}*\\z") && s.length()>2 && ! Constants.stopWords.contains(s))
                 op.add (Stemmer.getStem(s));
-            }
         }
 
         return op;

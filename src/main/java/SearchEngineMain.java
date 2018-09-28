@@ -17,7 +17,7 @@ public class SearchEngineMain
         System.out.println("\t Inverted index Level0 files created in : " + diff.toString() + " sec.");
 
         KWay.autoMerge();
-        Splitter.split();
+        FileChopper.split();
 
 
         TermIdMapper.writeMap(TermIdMapper.map, "map.bin");

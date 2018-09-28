@@ -3,6 +3,7 @@ import java.util.HashSet;
 
 class Constants
 {
+    public static int outputentry_per_page = 5;
     static String root = "out/";
     static String parsedFiles = root + "level1/";
     static String MergedFile = root + "merged/";

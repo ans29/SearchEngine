@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.Scanner;
 
-class Splitter
+class FileChopper
 {
     static void split() throws IOException
     {
